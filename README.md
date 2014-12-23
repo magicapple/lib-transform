@@ -24,19 +24,23 @@
 ### 初始化
 
     var Transform = lib.transform;
-    var instance = new Transform({
-        //此处声明参数
-        a: 'a',
-        b: 1
-    });
+    var t = new Transform();
+    t.rotate(15);
     
 
 ### 标准初始化参数
 
-**a**
+### 属性
 
-参数a的作用描述
+### 方法
 
-**b**
+* assign(value)
+* mul(value)
+* rotate
+* scale
+* skew
+* translate
+* at
+* toTransformString
+* parseTransformString
 
-参数b的作用描述

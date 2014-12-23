@@ -87,7 +87,15 @@
                 me.skew(sx,sy);
                 me.translate(-x,-y);
                 return me;
-            }
+            },
+            translate:function(tx,ty){
+                me.mul([
+                    [1,0,tx],
+                    [0,1,ty],
+                    [0,0,1]
+                ]);
+                return me;
+            };
         }
     };
     Transform.prototype.toString=function(){
@@ -109,12 +117,27 @@
             ])
             return this;
         }
-        var data = str.match(/matrix\( *([^ ,]+), *([^ ,]+), *([^ ,]+), *([^ ,]+), *([^ ,]+), *([^ ,]+)\)/).slice(1).map(function(s){ return parseFloat(s);});
-        this.assign([
-            [data[0],   data[2],    data[4]],
-            [data[1],   data[3],    data[5]],
-            [0,         0,          1]
-        ])
+        var data = str.match(/matrix\( *([^ ,]+), *([^ ,]+), *([^ ,]+), *([^ ,]+), *([^ ,]+), *([^ ,]+)\)/);
+        if(!data) {
+            data = str.transform.match(/matrix3d\( *([^ ,]+), *([^ ,]+), *([^ ,]+), *([^ ,]+), *([^ ,]+), *([^ ,]+) *([^ ,]+), *([^ ,]+), *([^ ,]+), *([^ ,]+), *([^ ,]+), *([^ ,]+)\)/)
+            if(!data) {
+                throw new Error("wrong transform string format");
+            }
+            data = data.slice(1).map(function(s){ return parseFloat(s);});
+            this.assign([
+                [data[0],   data[4],    data[12]],
+                [data[1],   data[5],    data[13]],
+                [0,         0,          1]
+            ])
+        
+        } else {
+            data = data.slice(1).map(function(s){ return parseFloat(s);});
+            this.assign([
+                [data[0],   data[2],    data[4]],
+                [data[1],   data[3],    data[5]],
+                [0,         0,          1]
+            ])
+        }
         return this;
     }
 
